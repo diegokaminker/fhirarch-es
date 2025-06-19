@@ -3,371 +3,312 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Infografía: FHIR y el Ecosistema de Estándares HL7</title>
+    <title>FHIR para Arquitectos: Componentes Arquitectónicos</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- 
-    Palette Name: Brilliant Blues
-    Analysis & Plan Summary:
-    Narrative Plan: The infographic explains the FHIR ecosystem beyond the core spec. It starts by introducing the foundational 'General Purpose Servers' which provide a ready-to-use FHIR backbone. It then transitions to the challenge of integrating with legacy systems, first by explaining the official 'HL7 V2 to FHIR Mapping Guide' as a conceptual bridge. Finally, it presents concrete 'Transformation & Mapping Tools' that implement these conversions, completing the interoperability picture. The narrative flows from foundational infrastructure to practical integration solutions.
-    Visualization Choices:
-    1. Data Point: Relative popularity and primary language of General Purpose FHIR servers. Goal: Compare. Chosen Visualization: Horizontal Bar Chart. Justification: Ideal for comparing distinct categories (the servers) along a single metric (popularity). The language is shown with text. Library/Method: Chart.js (Canvas). NO SVG.
-    2. Data Point: The conceptual process of converting an HL7 V2 message to a FHIR resource. Goal: Organize. Chosen Visualization: HTML/CSS Flow Diagram. Justification: Clearly illustrates a multi-step process using basic web elements, adhering to the NO SVG/NO MERMAID JS constraint. Library/Method: Tailwind CSS. NO SVG, NO MERMAID JS.
-    3. Data Point: Multi-faceted comparison of Transformation & Mapping (T&M) tools across features like flexibility, supported formats, and open-source status. Goal: Compare. Chosen Visualization: Radar Chart. Justification: Perfect for comparing multiple items (tools) across multiple, distinct axes (features), providing a quick visual summary of their strengths. Library/Method: Chart.js (Canvas). NO SVG.
-    Confirmation: NEITHER Mermaid JS NOR SVG were used anywhere in this output.
-    -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #EFF6FF;
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
         }
-        .chart-container {
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             position: relative;
-            width: 100%;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 300px;
-            max-height: 400px;
         }
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 350px;
-            }
+        .header {
+            background: linear-gradient(to right, #4a90e2, #50b0f7);
+            color: white;
+            padding: 2rem;
+            border-radius: 0.75rem 0.75rem 0 0;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .category-card {
+            background-color: #f7f9fc;
+            border-left: 6px solid #4a90e2;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        .category-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        .component-item {
+            background-color: #e3f2fd;
+            padding: 0.8rem 1.2rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            color: #1e88e5;
+            line-height: 1.5;
+        }
+        .component-item strong {
+            color: #2a6db8;
+        }
+        .component-item ul {
+            list-style: disc;
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+            color: #333;
+            font-size: 0.9rem;
+        }
+        .component-item ul li {
+            background-color: transparent;
+            padding: 0.2rem 0;
+            margin-bottom: 0;
+        }
+        .footer-info {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px dashed #ddd;
+            color: #666;
+            font-size: 0.9rem;
         }
     </style>
 </head>
-<body class="text-gray-800">
+<body>
 
-    <div class="container mx-auto p-4 md:p-8">
-
-        <header class="text-center mb-12">
-            <h1 class="text-4xl md:text-5xl font-bold text-blue-900 mb-2">FHIR y el Ecosistema de Estándares HL7</h1>
-            <p class="text-lg text-blue-700">Herramientas y Puentes para la Interoperabilidad Total</p>
-        </header>
-
-        <main class="space-y-16">
-
-            <section id="servers">
-                <div class="text-center mb-8">
-                    <h2 class="text-3xl font-bold text-blue-900">1. Servidores FHIR de Propósito General</h2>
-                    <p class="mt-2 max-w-3xl mx-auto text-blue-800">Son la base para construir soluciones FHIR. Ofrecen una implementación lista para usar de la especificación, cubriendo la mayoría de los recursos y operaciones estándar, permitiendo un desarrollo y despliegue rápidos.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                    <div class="bg-white p-6 rounded-lg shadow-lg border border-blue-100">
-                        <h3 class="text-xl font-bold text-blue-900 mb-4">Comparativa de Adopción y Tecnología</h3>
-                        <p class="text-sm text-gray-600 mb-4">Esta gráfica representa la popularidad relativa y el lenguaje de programación principal de los servidores FHIR más comunes. HAPI FHIR, basado en Java, muestra una alta adopción en el ecosistema empresarial, mientras que Spark (C#) es una fuerte alternativa en el mundo .NET. FHIR Candle sirve a un nicho crucial para pruebas rápidas.</p>
-                        <div class="chart-container">
-                            <canvas id="serverChart"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="space-y-4">
-                        <div class="bg-white p-6 rounded-lg shadow-md border border-blue-100 transition-transform transform hover:scale-105">
-                            <h4 class="font-bold text-lg text-blue-800">HAPI FHIR (Java)</h4>
-                            <p class="text-sm text-gray-700 mt-1">La implementación de referencia en Java. Muy completa y robusta, es la opción preferida para entornos de producción a gran escala.</p>
-                        </div>
-                        <div class="bg-white p-6 rounded-lg shadow-md border border-blue-100 transition-transform transform hover:scale-105">
-                            <h4 class="font-bold text-lg text-blue-800">Spark (C#)</h4>
-                            <p class="text-sm text-gray-700 mt-1">El principal servidor FHIR de código abierto en el ecosistema .NET, desarrollado inicialmente por Firely. Una opción sólida y probada.</p>
-                        </div>
-                        <div class="bg-white p-6 rounded-lg shadow-md border border-blue-100 transition-transform transform hover:scale-105">
-                            <h4 class="font-bold text-lg text-blue-800">FHIR Candle (En memoria)</h4>
-                            <p class="text-sm text-gray-700 mt-1">Un servidor ultraligero para pruebas y desarrollo. Arranca al instante y no requiere base de datos, ideal para validación rápida de IGs.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="mapping">
-                <div class="text-center mb-8">
-                    <h2 class="text-3xl font-bold text-blue-900">2. El Puente Hacia Estándares Previos</h2>
-                    <p class="mt-2 max-w-3xl mx-auto text-blue-800">La interoperabilidad real requiere conectar FHIR con sistemas legados. El mapeo conceptual desde estándares como HL7v2 es el primer paso fundamental en este proceso de modernización.</p>
-                </div>
-
-                <div class="bg-white p-8 rounded-lg shadow-lg border border-blue-100">
-                    <h3 class="text-xl font-bold text-blue-900 mb-2 text-center">Proceso de Mapeo: De HL7v2 a FHIR</h3>
-                    <p class="text-sm text-gray-600 mb-8 text-center max-w-2xl mx-auto">Este diagrama ilustra el flujo conceptual de transformación. Un mensaje HL7v2 es procesado por un motor de mapeo, que utiliza guías de implementación (como la oficial de `v2-to-fhir`) para convertir los datos a recursos FHIR estructurados. Este es un proceso guiado por reglas, no una conversión automática.</p>
-                    
-                    <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
-                        <div class="flex items-center flex-col text-center">
-                            <div class="bg-blue-100 text-blue-800 p-4 rounded-lg shadow">
-                                <span class="text-3xl">📄</span>
-                                <p class="font-semibold mt-2">Mensaje HL7v2</p>
-                            </div>
-                        </div>
-                        
-                        <div class="text-5xl text-blue-400 font-light transform md:rotate-0 rotate-90">&rarr;</div>
-
-                        <div class="flex items-center flex-col text-center">
-                             <div class="bg-blue-200 text-blue-900 p-4 rounded-lg shadow">
-                                <span class="text-3xl">⚙️</span>
-                                <p class="font-semibold mt-2">Motor de Mapeo</p>
-                                <p class="text-xs">(Usa Guía IG)</p>
-                            </div>
-                        </div>
-
-                        <div class="text-5xl text-blue-400 font-light transform md:rotate-0 rotate-90">&rarr;</div>
-
-                        <div class="flex items-center flex-col text-center">
-                            <div class="bg-blue-300 text-blue-900 p-4 rounded-lg shadow">
-                                <span class="text-3xl">🔥</span>
-                                <p class="font-semibold mt-2">Recurso FHIR</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="tools">
-                <div class="text-center mb-8">
-                    <h2 class="text-3xl font-bold text-blue-900">3. Herramientas de Transformación y Mapeo (T&M)</h2>
-                    <p class="mt-2 max-w-3xl mx-auto text-blue-800">Estas herramientas especializadas implementan la lógica de conversión, permitiendo a las organizaciones transformar datos entre formatos legados y FHIR de manera eficiente y escalable.</p>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                     <div class="space-y-4">
-                        <div class="bg-white p-6 rounded-lg shadow-md border border-blue-100 transition-transform transform hover:scale-105">
-                            <h4 class="font-bold text-lg text-blue-800">FUME by Outburn</h4>
-                            <p class="text-sm text-gray-700 mt-1">Un motor de conversión con una sintaxis propia y expresiva, diseñado para analistas de datos. Ofrece una API para transformaciones en tiempo real.</p>
-                        </div>
-                        <div class="bg-white p-6 rounded-lg shadow-md border border-blue-100 transition-transform transform hover:scale-105">
-                            <h4 class="font-bold text-lg text-blue-800">Microsoft FHIR Converter</h4>
-                            <p class="text-sm text-gray-700 mt-1">Proyecto open-source que usa plantillas Liquid para conversiones flexibles. Soporta HL7v2, C-CDA y más. Integrado en el ecosistema Azure.</p>
-                        </div>
-                        <div class="bg-white p-6 rounded-lg shadow-md border border-blue-100 transition-transform transform hover:scale-105">
-                            <h4 class="font-bold text-lg text-blue-800">Mirth Connect</h4>
-                            <p class="text-sm text-gray-700 mt-1">Un motor de integración clásico que actúa como un "traductor universal", capaz de filtrar, transformar y enrutar mensajes entre múltiples estándares.</p>
-                        </div>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg shadow-lg border border-blue-100">
-                         <h3 class="text-xl font-bold text-blue-900 mb-4">Radar de Capacidades de Herramientas T&M</h3>
-                        <p class="text-sm text-gray-600 mb-4">Este gráfico compara las herramientas de transformación en ejes clave. Microsoft FHIR Converter destaca por su flexibilidad y estatus de código abierto, FUME por su sintaxis especializada, y Mirth por su madurez y capacidades de enrutamiento complejas.</p>
-                        <div class="chart-container">
-                            <canvas id="toolRadarChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-        </main>
-
-        <footer class="text-center mt-16 pt-8 border-t border-blue-200">
-            <p class="text-blue-800">&copy; 2025 Infografía de Ecosistema FHIR. La interoperabilidad se logra con una base sólida y los puentes correctos.</p>
-        </footer>
-
-    </div>
-
-    <script>
-        const wrapLabel = (label, maxWidth) => {
-            if (label.length <= maxWidth) {
-                return label;
-            }
-            const words = label.split(' ');
-            const lines = [];
-            let currentLine = '';
-            words.forEach(word => {
-                if ((currentLine + ' ' + word).trim().length > maxWidth && currentLine.length > 0) {
-                    lines.push(currentLine);
-                    currentLine = word;
-                } else {
-                    currentLine = (currentLine + ' ' + word).trim();
-                }
-            });
-            if (currentLine.length > 0) {
-                lines.push(currentLine);
-            }
-            return lines;
-        };
-
-        const tooltipTitleCallback = (tooltipItems) => {
-            const item = tooltipItems[0];
-            let label = item.chart.data.labels[item.dataIndex];
-            if (Array.isArray(label)) {
-              return label.join(' ');
-            }
-            return label;
-        };
-        
-        const chartTooltipOptions = {
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        title: tooltipTitleCallback
-                    }
-                }
-            }
-        };
-
-        const serverCtx = document.getElementById('serverChart').getContext('2d');
-        new Chart(serverCtx, {
-            type: 'bar',
-            data: {
-                labels: ['HAPI FHIR', 'Spark', 'FHIR Candle'],
-                datasets: [{
-                    label: 'Adopción Relativa',
-                    data: [90, 70, 45],
-                    backgroundColor: ['#3B82F6', '#60A5FA', '#93C5FD'],
-                    borderColor: '#1E3A8A',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                ...chartTooltipOptions,
-                indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    ...chartTooltipOptions.plugins,
-                    legend: {
-                        display: false
-                    },
-                    annotation: {
-                        annotations: {
-                            label1: {
-                                type: 'label',
-                                yValue: 'HAPI FHIR',
-                                xValue: 92,
-                                content: 'Java',
-                                font: { size: 12 },
-                                color: '#1E3A8A',
-                                xAdjust: -25,
-                            },
-                             label2: {
-                                type: 'label',
-                                yValue: 'Spark',
-                                xValue: 72,
-                                content: 'C#',
-                                font: { size: 12 },
-                                color: '#1E3A8A',
-                                xAdjust: -20,
-                            },
-                             label3: {
-                                type: 'label',
-                                yValue: 'FHIR Candle',
-                                xValue: 47,
-                                content: 'Test',
-                                font: { size: 12 },
-                                color: '#1E3A8A',
-                                xAdjust: -25,
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        grid: {
-                            color: '#DBEAFE'
-                        },
-                        ticks: {
-                           color: '#1E3A8A'
-                        }
-                    },
-                    y: {
-                         grid: {
-                            display: false
-                        },
-                        ticks: {
-                           color: '#1E3A8A'
-                        }
-                    }
-                }
-            }
-        });
-
-        const toolRadarCtx = document.getElementById('toolRadarChart').getContext('2d');
-        new Chart(toolRadarCtx, {
-            type: 'radar',
-            data: {
-                labels: [
-                    'Formatos Soportados',
-                    'Flexibilidad', 
-                    'Comunidad / Open Source', 
-                    'Curva de Aprendizaje', 
-                    'Capacidad de Enrutamiento'
-                ].map(l => wrapLabel(l, 16)),
-                datasets: [{
-                    label: 'MS FHIR Converter',
-                    data: [8, 9, 9, 6, 4],
-                    fill: true,
-                    backgroundColor: 'rgba(59, 130, 246, 0.2)',
-                    borderColor: 'rgb(59, 130, 246)',
-                    pointBackgroundColor: 'rgb(59, 130, 246)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgb(59, 130, 246)'
-                }, {
-                    label: 'FUME',
-                    data: [7, 7, 5, 8, 5],
-                    fill: true,
-                    backgroundColor: 'rgba(30, 58, 138, 0.2)',
-                    borderColor: 'rgb(30, 58, 138)',
-                    pointBackgroundColor: 'rgb(30, 58, 138)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgb(30, 58, 138)'
-                }, {
-                    label: 'Mirth Connect',
-                    data: [9, 6, 6, 5, 9],
-                    fill: true,
-                    backgroundColor: 'rgba(147, 197, 253, 0.2)',
-                    borderColor: 'rgb(147, 197, 253)',
-                    pointBackgroundColor: 'rgb(147, 197, 253)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgb(147, 197, 253)'
-                }]
-            },
-            options: {
-                ...chartTooltipOptions,
-                responsive: true,
-                maintainAspectRatio: false,
-                elements: {
-                    line: {
-                        borderWidth: 2
-                    }
-                },
-                scales: {
-                    r: {
-                        angleLines: { color: '#BFDBFE' },
-                        grid: { color: '#BFDBFE' },
-                        pointLabels: { color: '#1E3A8A', font: {size: 11} },
-                        ticks: {
-                          display: false,
-                          beginAtZero: true,
-                          max: 10,
-                          stepSize: 2
-                        }
-                    }
-                },
-                plugins: {
-                    ...chartTooltipOptions.plugins,
-                    legend: {
-                       position: 'top',
-                       labels: {
-                           color: '#1E3A8A'
-                       }
-                    }
-                }
-            }
-        });
-    </script>
-
-    <!-- Quiz Section -->
-    <div class="section-card">
-        <h2 class="section-title flex items-center"><i class="fas fa-question-circle mr-3 text-blue-600"></i> Evaluación del Módulo</h2>
-        <div class="section-content">
-            <p class="text-md text-gray-700 mb-4">Pon a prueba tus conocimientos sobre arquitectura de sistemas FHIR con estas 10 preguntas de opción múltiple.</p>
-            <button onclick="startQuiz('session3')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
-                <i class="fas fa-play mr-2"></i>Comenzar Evaluación
-            </button>
+    <div class="container">
+        <div class="header rounded-xl">
+            <h1 class="text-4xl font-extrabold mb-2">FHIR para Arquitectos</h1>
+            <p class="text-xl">Sesión 3: Visión General de Componentes Arquitectónicos</p>
         </div>
-        <div id="quiz-container" class="mt-6"></div>
+
+        <div class="bg-blue-50 p-6 rounded-xl shadow-md mb-6 text-center">
+            <p class="text-lg font-semibold text-blue-800 mb-2">Anfitrión: Diego Kaminker</p>
+            <p class="text-md text-blue-700">Metodología de la sesión: Se describirá cada categoría de componente arquitectónico, explicando funcionalidad, GIs FHIR relacionadas, implementaciones de código abierto, ejemplos y relaciones con otros componentes. ¡Luego, jugaremos el "FHIR Architecture Supermarket Game"!</p>
+            <p class="text-sm text-blue-600 mt-2">Descargo de responsabilidad: Esta sesión incluye solo componentes y servicios 'genéricos' para proyectos de salud digital basados en FHIR, no sistemas de atención al paciente completos.</p>
+        </div>
+
+        <!-- Categoría: Almacenes de Datos Clínicos -->
+        <div class="category-card">
+            <h2 class="category-title"><i class="fas fa-database mr-3 text-blue-600"></i> Almacenes de Datos Clínicos</h2>
+            <div class="section-content">
+                <p class="text-md text-gray-700 mb-4">Esta categoría aplica a servicios que permiten el intercambio y almacenamiento de información clínica.</p>
+                <div class="component-item">
+                    <strong>Almacén de Documentos (DS):</strong> Permite el almacenamiento, búsqueda y acceso a documentos clínicos. Usualmente a través de un registro de documentos. Ej: HIE en USA.
+                </div>
+                <div class="component-item">
+                    <strong>Almacén de Datos Granulares (GDS):</strong> Un repositorio de datos clínicos que consolida datos de diversas fuentes para una vista centralizada, centrada en el paciente. Almacena cada pieza de información por separado (alergias, resultados de laboratorio, etc.). Ej: Smile CDR/FHIR HAPI, Google Healthcare API.
+                </div>
+                <div class="component-item">
+                    <strong>Repositorio de Imágenes (IR):</strong> Proporciona recolección y almacenamiento seguro de imágenes médicas e informes. Estándares: DICOM Web y recursos FHIR específicos (ImagingStudy). Ej: Phillips, GE. Las imágenes se separan por su tamaño y complejidad.
+                </div>
+            </div>
+        </div>
+
+        <!-- Categoría: Infraestructura -->
+        <div class="category-card">
+            <h2 class="category-title"><i class="fas fa-server mr-3 text-blue-600"></i> Infraestructura</h2>
+            <div class="section-content">
+                <p class="text-md text-gray-700 mb-4">Esta categoría aplica a servicios básicos compartidos de seguridad y auditoría.</p>
+                <div class="component-item">
+                    <strong>Autenticación (AUTHE):</strong> Verifica la identidad del usuario (OAuth 2.0, OpenID Connect). Provee un TOKEN. Ej: KeyCloak, servicios de autenticación en la nube.
+                </div>
+                <div class="component-item">
+                    <strong>Autorización (AUTHO):</strong> Verifica si el rol del usuario permite acceso a los datos solicitados ('scopes'). Ej: Smart-on-FHIR.
+                </div>
+                <div class="component-item">
+                    <strong>Gestión de Consentimiento (CONS):</strong> Determina si un pagador/proveedor tiene autoridad para ver datos de salud específicos de un paciente, según roles, uso previsto, granularidad y leyes locales. Ej: Google Healthcare API (recurso Consent FHIR).
+                </div>
+                <div class="component-item">
+                    <strong>Registro de Auditoría (AL):</strong> Asegura que se creen y mantengan registros de auditoría de acceso a la información, cumpliendo con las regulaciones locales. Ej: Patrones de registro de auditoría básicos (IHE).
+                </div>
+                <div class="component-item">
+                    <strong>Pasarela API (AG):</strong> Punto de entrada centralizado para gestionar interacciones cliente-backend, actuando como proxy inverso. Ej: Google Apigee, NGINX, APIsix, Kong Community Edition, FHIR Gateway.
+                </div>
+                <div class="component-item">
+                    <strong>Firma Digital (DS):</strong> Provee infraestructura para firma digital (PKI, certificados, validación). Asegura autenticidad, integridad y no repudio. Ej: NHS Digital Signature Service.
+                </div>
+            </div>
+        </div>
+
+        <!-- Categoría: Registros -->
+        <div class="category-card">
+            <h2 class="category-title"><i class="fas fa-address-book mr-3 text-blue-600"></i> Registros</h2>
+            <div class="section-content">
+                <p class="text-md text-gray-700 mb-4">Esta categoría aplica a servicios compartidos que identifican las entidades participantes en la prestación de atención médica.</p>
+                <div class="component-item">
+                    <strong>Identidad del Paciente (MPI):</strong> Base de datos centralizada/federada que mantiene identificadores únicos e información demográfica de pacientes, vinculando sus registros. Ej: FHIR HAPI (opción MDM).
+                </div>
+                <div class="component-item">
+                    <strong>Directorio de Proveedores (PRI):</strong> Identifica organizaciones, profesionales y ubicaciones de atención. Puede ser federado o sincronizado. Ej: FHIR HAPI (opción MDM).
+                </div>
+                <div class="component-item">
+                    <strong>Directorio de Puntos de Acceso (END):</strong> Resuelve el problema de ENCONTRAR un servidor FHIR (o cualquier otro servidor). Ej: Edifecs Endpoint Directory Solution.
+                </div>
+                <div class="component-item">
+                    <strong>Directorio de Dispositivos (DEV):</strong> Base de datos con identificación única y atributos para todos los dispositivos utilizados en una organización (imágenes, laboratorio, etc.). Ej: US Core Implantable Device.
+                </div>
+            </div>
+        </div>
+
+        <!-- Categoría: Integración -->
+        <div class="category-card">
+            <h2 class="category-title"><i class="fas fa-plug mr-3 text-blue-600"></i> Integración</h2>
+            <div class="section-content">
+                <p class="text-md text-gray-700 mb-4">Esta categoría aplica a servicios que permiten el intercambio de datos, la aplicación de conocimiento y la transformación dinámica entre formatos de datos.</p>
+                <div class="component-item">
+                    <strong>Motor de Transformación de Artefactos (ENG):</strong> Realiza transformaciones entre sintaxis (HL7 V2.x, CDA R2, JSON, XML, CSV a/desde FHIR). Ej: Mirth, Intersystems, Azure/Google.
+                </div>
+                <div class="component-item">
+                    <strong>Servicio CDS Hooks (CDS):</strong> Soporte de decisiones clínicas utilizando información del paciente para guiar los siguientes pasos de atención. Utiliza un API estándar y recursos FHIR.
+                </div>
+                <div class="component-item">
+                    <strong>Aplicaciones SMART-on-FHIR (SMART):</strong> Integran una aplicación o sitio web a un EHR existente, definiendo cómo lanzar la aplicación y acceder a datos FHIR con autorización.
+                </div>
+                <div class="component-item">
+                    <strong>Servicio de Importación Masiva FHIR (FHIR-IMP):</strong> Permite incorporar miles de registros en un almacén FHIR existente (cargas iniciales, migraciones).
+                </div>
+                <div class="component-item">
+                    <strong>Cola de Mensajería (MQ):</strong> Permite la comunicación asíncrona entre componentes actuando como almacenamiento temporal de mensajes. Ej: Amazon SQS, RabbitMQ, Apache Kafka.
+                </div>
+                <div class="component-item">
+                    <strong>Servicios de Suscripción (SUB):</strong> Similares a las colas de mensajes, pero con una especificación FHIR que permite elegir un "Subscription Topic" para notificaciones. Ej: Microsoft Azure, HAPI FHIR.
+                </div>
+                <div class="component-item">
+                    <strong>API RESTful FHIR (FHIR):</strong> El componente que permite acceso a datos (GET/PUT/POST/DELETE). Puede ser nativo (GDS) o una "fachada" para un servidor no FHIR.
+                </div>
+                <div class="component-item">
+                    <strong>Generador IPS (IPS) / Smart Health Links:</strong> Crea un documento de Resumen Internacional del Paciente (IPS) basado en datos del paciente. Ej: Servidores HAPI FHIR (operación \$summary).
+                </div>
+                <div class="component-item">
+                    <strong>Motor CQL (CQL):</strong> Interpreta y procesa expresiones CQL para calcular medidas de calidad y detectar brechas en la atención. Requiere acceso a recursos FHIR. Ej: HAPI FHIR, FIRE.LY, Google.
+                </div>
+            </div>
+        </div>
+
+        <!-- Categoría: Uso Secundario -->
+        <div class="category-card">
+            <h2 class="category-title"><i class="fas fa-chart-line mr-3 text-blue-600"></i> Uso Secundario</h2>
+            <div class="section-content">
+                <p class="text-md text-gray-700 mb-4">Esta categoría aplica a servicios que permiten la extracción (asíncrona) de datos masivos de salud del formato FHIR a otros formatos, o de datos FHIR a formato masivo FHIR.</p>
+                <div class="component-item">
+                    <strong>Exportación Masiva FHIR (FHIR-EXP):</strong> Acepta una operación \$export y procesa la extracción de recursos FHIR, creando archivos NDJSON para descarga.
+                </div>
+                <div class="component-item">
+                    <strong>Servicios de Desidentificación (DID):</strong> Aplica algoritmos de desidentificación para eliminar o enmascarar datos demográficos e identificadores del paciente para la confidencialidad. Ej: Microsoft, Google.
+                </div>
+                <div class="component-item">
+                    <strong>Transformador FHIR-a-OMOP (FHIR-OMOP):</strong> Transforma recursos FHIR al formato SQL de OMOP, usado para análisis de salud poblacional.
+                </div>
+                <div class="component-item">
+                    <strong>Motor SQL-on-FHIR (FHIR-SQL):</strong> Provee una capa de datos estandarizada para acceder a cualquier almacén FHIR usando SQL. Ej: FHIR Aidbox, Google Healthcare, Pathling.
+                </div>
+                <div class="component-item">
+                    <strong>FHIR-a-Parquet (PARQ):</strong> Convierte recursos FHIR al formato Parquet, ampliamente utilizado para ingestar datos en análisis y ML. Ej: Google FHIR Data Pipes ETL, Microsoft Synapse.
+                </div>
+            </div>
+        </div>
+
+        <!-- Categoría: Validación -->
+        <div class="category-card">
+            <h2 class="category-title"><i class="fas fa-check-circle mr-3 text-blue-600"></i> Validación</h2>
+            <div class="section-content">
+                <p class="text-md text-gray-700 mb-4">Parte de la validación se puede realizar con la infraestructura de perfiles de FHIR, pero otra requiere programación personalizada.</p>
+                <div class="component-item">
+                    <strong>Validación de Recursos (VAL):</strong> Valida recursos FHIR a nivel de esquema, schematron y definición de estructura (incluyendo terminología). Ej: FHIR Validator, la mayoría de los servidores FHIR.
+                </div>
+                <div class="component-item">
+                    <strong>Acceso a Terminología (TERM):</strong> Provee acceso estandarizado a la terminología, permitiendo validar códigos, poblar combos, mapear códigos. Ej: FHIR HAPI, CSIRO Ontoserver.
+                </div>
+                <div class="component-item">
+                    <strong>Autoría y Distribución de Terminología (TERM-AD):</strong> Permite la creación y mantenimiento de ValueSets, Code Systems y Concept Maps, facilitando su importación/exportación y distribución. Ej: CSIRO Ontomed.
+                </div>
+                <div class="component-item">
+                    <strong>Reglas de Negocio, Flujo de Trabajo y Validación (BRW):</strong> Permite definir e implementar reglas de negocio locales para procesamiento, flujo de trabajo o validación. Puede usar scripts, motores de reglas, BPMN.
+                </div>
+                <div class="component-item">
+                    <strong>Definiciones de Cuestionarios, Medicamentos y Medidas (CRM):</strong> Permite la autoría y acceso a "Recursos de Representación del Conocimiento" o "Recursos Canónicos" para representar definiciones semánticas. Ej: LHC Forms.
+                </div>
+            </div>
+        </div>
+
+        <!-- Categoría: Inteligencia Artificial -->
+        <div class="category-card">
+            <h2 class="category-title"><i class="fas fa-robot mr-3 text-blue-600"></i> Inteligencia Artificial</h2>
+            <div class="section-content">
+                <p class="text-md text-gray-700 mb-4">Proporciona acceso a herramientas, servicios e infraestructura de aprendizaje automático.</p>
+                <div class="component-item">
+                    <strong>Entrenamiento de Aprendizaje Automático (MLT):</strong> Permite la ingesta y procesamiento de conjuntos de datos (incluyendo FHIR NDJSON o Parquet) para crear, desarrollar y entrenar modelos. Ej: Amazon SageMaker, Azure ML, Google Vertex-AI.
+                </div>
+                <div class="component-item">
+                    <strong>Reconocimiento de Imágenes (CV):</strong> Interpreta y analiza datos visuales para obtener información de imágenes o videos (análisis de imágenes médicas, detección de enfermedades). Ej: Amazon Rekognition, Google Vision AI, OpenCV.
+                </div>
+                <div class="component-item">
+                    <strong>Procesador de Lenguaje Natural (NLP):</strong> Entiende, interpreta y genera lenguaje humano (texto o voz). Usos: extracción de información, chatbots, codificación médica. Ej: Amazon, Azure, Google.
+                </div>
+                <div class="component-item">
+                    <strong>Traductor de Idiomas (LT):</strong> Caso especial de NLP que traduce fragmentos de lenguaje natural a otro idioma. Útil para resúmenes de pacientes transfronterizos. Ej: Amazon Translate, Azure Translator, Google Cloud Translation.
+                </div>
+                <div class="component-item">
+                    <strong>IA Generativa (GenAI):</strong> Crea texto, imágenes o videos basándose en el entrenamiento con grandes conjuntos de datos (LLMs). Se puede complementar con RAG. Ej: OpenAI GPT, Google Vertex AI.
+                </div>
+                <div class="component-item">
+                    <strong>Chatbot y Agentes (CHAT):</strong> Componente para una interacción más fluida con proveedores y pacientes (respuestas, programación de citas, monitoreo de salud).
+                </div>
+                <div class="component-item">
+                    <strong>Servidor MCP (MCPS):</strong> Provee contexto justo a tiempo a un chatbot de IA, agente o cliente GenAI utilizando el estándar MCP (Model Context Protocol).
+                </div>
+                <div class="component-item">
+                    <strong>Servicio A2A (A2AS):</strong> Permite la comunicación y colaboración estándar entre agentes, facilitando el descubrimiento de capacidades y la negociación de modos de interacción.
+                </div>
+            </div>
+        </div>
+
+        <!-- Categoría: Servicios de Notificación -->
+        <div class="category-card">
+            <h2 class="category-title"><i class="fas fa-bell mr-3 text-blue-600"></i> Servicios de Notificación</h2>
+            <div class="section-content">
+                <p class="text-md text-gray-700 mb-4">El objetivo principal de estos servicios es llegar al proveedor, pagador o paciente lo antes posible para alertas o notificaciones rutinarias.</p>
+                <div class="component-item">
+                    <strong>Notificación por Correo Electrónico:</strong> Envía alertas o notificaciones por correo electrónico. Consideraciones: direcciones de correo, volumen, consentimiento, privacidad.
+                </div>
+                <div class="component-item">
+                    <strong>Notificación Push de EHR:</strong> Envía la alerta o notificación directamente al EHR o portal del paciente. Ventaja: seguridad y privacidad ya manejadas por el EHR.
+                </div>
+                <div class="component-item">
+                    <strong>Integración de Mensajería:</strong> Se integra con servicios de mensajería (Whatsapp, Signal, Telegram, iMessage) para enviar alertas. Más rápido que el correo electrónico, pero con las mismas preocupaciones de privacidad y seguridad.
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Section -->
+        <div class="category-card">
+            <h2 class="category-title"><i class="fas fa-question-circle mr-3 text-blue-600"></i> Evaluación del Módulo</h2>
+            <div class="section-content">
+                <p class="text-md text-gray-700 mb-4">Pon a prueba tus conocimientos sobre FHIR y otros estándares con estas 10 preguntas de opción múltiple.</p>
+                <button onclick="startQuiz('session2')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                    <i class="fas fa-play mr-2"></i>Comenzar Evaluación
+                </button>
+            </div>
+            <div id="quiz-container" class="mt-6"></div>
+        </div>
+
+        <div class="footer-info">
+            <p>&copy; 2025 HL7 INTERNATIONAL Todos los derechos reservados.</p>
+        </div>
     </div>
 
     <!-- Quiz JavaScript -->
