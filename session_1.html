@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FHIR para Arquitectos: Mecanismos de Intercambio FHIR - Sesión 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .header {
+            background: linear-gradient(to right, #4a90e2, #50b0f7);
+            color: white;
+            padding: 2rem;
+            border-radius: 0.75rem 0.75rem 0 0;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .section-card {
+            background-color: #f7f9fc;
+            border-left: 6px solid #4a90e2;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        .break-card {
+            background-color: #ffedd5;
+            border-left: 6px solid #f97316;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #f97316;
+            font-weight: 600;
+        }
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 0.75rem;
+        }
+        .section-content ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .section-content li {
+            background-color: #e3f2fd;
+            padding: 0.6rem 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            color: #1e88e5;
+            display: flex;
+            align-items: flex-start;
+        }
+        .section-content li:last-child {
+            margin-bottom: 0;
+        }
+        .section-content li .icon {
+            margin-right: 0.75rem;
+            color: #4a90e2;
+            font-size: 1.1rem;
+            line-height: 1.4; /* Adjust line-height for better alignment */
+        }
+        .footer-info {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px dashed #ddd;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .important-note {
+            background-color: #ffe6e6;
+            border-left: 6px solid #e02424;
+            color: #c00;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header rounded-xl">
+            <h1 class="text-4xl font-extrabold mb-2">FHIR para Arquitectos</h1>
+            <p class="text-xl">Sesión 1: Mecanismos de Intercambio FHIR</p>
+            <p class="text-lg">Más Allá de REST</p>
+        </div>
+
+        <!-- Introducción -->
+        <div class="section-card">
+            <h2 class="section-title flex items-center"><i class="fas fa-info-circle mr-3 text-blue-600"></i> Introducción</h2>
+            <div class="section-content">
+                <p class="text-md text-gray-700 mb-2">Su anfitrión hoy: <strong>DIEGO KAMINKER. FHL7, FIAHSI</strong></p>
+                <ul class="text-gray-600">
+                    <li><span class="icon"><i class="fas fa-star"></i></span>HL7, Miembro</li>
+                    <li><span class="icon"><i class="fas fa-star"></i></span>IMIA-Academia Internacional de Informática en Ciencias de la Salud, Miembro</li>
+                    <li><span class="icon"><i class="fas fa-star"></i></span>Director Afiliado de HL7 (2008-2012, 2019-2022)</li>
+                    <li><span class="icon"><i class="fas fa-star"></i></span>Coautor/Coordinador de Fundamentos de HL7</li>
+                    <li><span class="icon"><i class="fas fa-star"></i></span>Coautor/Coordinador de Fundamentos de HL7 FHIR</li>
+                    <li><span class="icon"><i class="fas fa-star"></i></span>Coautor/Coordinador Intermedio de HL7 FHIR</li>
+                    <li><span class="icon"><i class="fas fa-star"></i></span>Creador de HL7 FHIR Experience</li>
+                    <li><span class="icon"><i class="fas fa-star"></i></span>Miembro del Comité Asesor de Educación de HL7</li>
+                    <li><span class="icon"><i class="fas fa-star"></i></span>HL7 Argentina / Miembro de la Junta Directiva desde 2002</li>
+                    <li><span class="icon"><i class="fas fa-envelope"></i></span>kaminker.diego@gmail.com</li>
+                </ul>
+                <h3 class="text-lg font-semibold mt-4 mb-2 text-blue-700">Agradecimientos:</h3>
+                <p class="text-md text-gray-700">Grahame Grieve, Josh Mandel, Lloyd McKenzie, Brett Marquard, Ewout Kramer, Rik Smithies, David Hay, Simonne Heckmann, Proyecto Da Vinci, Proyecto FAST, Virginia Lorenzi, Fernando Campos.</p>
+            </div>
+        </div>
+
+        <!-- Audiencia Prevista y Objetivos de Aprendizaje -->
+        <div class="section-card">
+            <h2 class="section-title flex items-center"><i class="fas fa-users mr-3 text-blue-600"></i> Audiencia Prevista</h2>
+            <div class="section-content">
+                <ul>
+                    <li><span class="icon"><i class="fas fa-user-tie"></i></span>Desarrolladores o personas interesadas en implementar FHIR.</li>
+                    <li><span class="icon"><i class="fas fa-book"></i></span>Los participantes del Bootcamp de FHIR de HL7 deben prepararse tomando primero un curso de Introducción a FHIR, y/o teniendo algo de experiencia en XML/JSON o Javascript.</li>
+                    <li><span class="icon"><i class="fas fa-laptop-code"></i></span>Se espera que los participantes se sientan cómodos con la tecnología y el uso de la computadora.</li>
+                </ul>
+            </div>
+            <h2 class="section-title flex items-center mt-6"><i class="fas fa-clipboard-check mr-3 text-blue-600"></i> Objetivos de Aprendizaje</h2>
+            <div class="section-content">
+                <ul>
+                    <li><span class="icon"><i class="fas fa-bullseye"></i></span>Describir los paradigmas de intercambio de FHIR.</li>
+                    <li><span class="icon"><i class="fas fa-exchange-alt"></i></span>Comparar y seleccionar los paradigmas apropiados para casos de uso específicos.</li>
+                    <li><span class="icon"><i class="fas fa-database"></i></span>Implementar una transacción FHIR.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Paradigmas de Interoperabilidad FHIR -->
+        <div class="section-card">
+            <h2 class="section-title flex items-center"><i class="fas fa-puzzle-piece mr-3 text-blue-600"></i> Paradigmas de Interoperabilidad FHIR</h2>
+            <div class="section-content">
+                <p class="text-md text-gray-700 mb-2">FHIR soporta 4 paradigmas de interoperabilidad, ¿o quizás 8?</p>
+                <p class="text-md text-gray-700 mb-4">Los principales paradigmas son:</p>
+                <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <li><span class="icon"><i class="fas fa-code"></i></span><strong>REST:</strong> Simple, plug-and-play, aprovecha HTTP, operaciones CRUD predefinidas.</li>
+                    <li><span class="icon"><i class="fas fa-sync-alt"></i></span><strong>Transacciones / Lotes:</strong> Múltiples operaciones a la vez (relacionadas o no).</li>
+                    <li><span class="icon"><i class="fas fa-file-alt"></i></span><strong>Documentos:</strong> Colecciones de recursos enviados como un 'paquete', primer recurso 'Composition'.</li>
+                    <li><span class="icon"><i class="fas fa-envelope-open-text"></i></span><strong>Mensajes:</strong> Como HL7 V2 y V3, paquete de recursos, basado en eventos, asíncrono.</li>
+                    <li><span class="icon"><i class="fas fa-server"></i></span><strong>Servicios:</strong> Cualquier otro método ad-hoc para intercambiar recursos FHIR.</li>
+                    <li><span class="icon"><i class="fas fa-hdd"></i></span><strong>Almacenamiento:</strong> Para almacenar recursos FHIR en repositorios clínicos genéricos.</li>
+                    <li><span class="icon"><i class="fas fa-paper-plane"></i></span><strong>Suscripciones:</strong> Similar a la mensajería, permite suscribirse a tópicos y recibir notificaciones.</li>
+                    <li><span class="icon"><i class="fas fa-exchange-alt"></i></span><strong>Transferencia Masiva de Datos (Bulk Data Transfer):</strong> Para grandes volúmenes de datos de pacientes (e.g., salud poblacional, ML).</li>
+                </ul>
+                <p class="text-md text-gray-700 mt-4 font-bold">Importante: Independientemente del paradigma, el contenido (los recursos FHIR) es el mismo.</p>
+            </div>
+        </div>
+
+        <!-- Conceptos Clave -->
+        <div class="section-card">
+            <h2 class="section-title flex items-center"><i class="fas fa-key mr-3 text-blue-600"></i> Conceptos Clave</h2>
+            <div class="section-content">
+                <h3 class="text-lg font-semibold mt-4 mb-2 text-blue-700">Paquetes FHIR (FHIR Bundles):</h3>
+                <p class="text-md text-gray-700 mb-2">Son conjuntos de recursos, el bloque de construcción fundamental para todos los paradigmas. El <code>Bundle.type</code> define el tipo (transacción, mensaje, lote, documento).</p>
+
+                <h3 class="text-lg font-semibold mt-4 mb-2 text-blue-700">Referencias dentro del Paquete:</h3>
+                <p class="text-md text-gray-700 mb-2">Referencias virtuales resueltas por el servidor FHIR, útiles cuando el identificador lógico aún no se conoce.</p>
+                <ul class="text-gray-600">
+                    <li><span class="icon"><i class="fas fa-link"></i></span><strong>Absoluta:</strong> El recurso está en un servidor específico.</li>
+                    <li><span class="icon"><i class="fas fa-link"></i></span><strong>Relativa:</strong> El recurso está en el mismo servidor.</li>
+                    <li><span class="icon"><i class="fas fa-link"></i></span><strong>Contenida:</strong> El recurso está dentro del mismo recurso (sin identidad externa).</li>
+                    <li><span class="icon"><i class="fas fa-link"></i></span><strong>Identificador:</strong> Referencia por un identificador humano.</li>
+                    <li><span class="icon"><i class="fas fa-link"></i></span><strong>Empaquetada (Bundled):</strong> El recurso de referencia está en el mismo paquete.</li>
+                </ul>
+
+                <h3 class="text-lg font-semibold mt-4 mb-2 text-blue-700">Operaciones Condicionales:</h3>
+                <p class="text-md text-gray-700 mb-2">Permiten crear/actualizar/eliminar si no existe, utilizando una consulta de búsqueda en el encabezado 'if-none-exist'.</p>
+
+                <h3 class="text-lg font-semibold mt-4 mb-2 text-blue-700">Resultado de la Operación (Operation Outcome):</h3>
+                <p class="text-md text-gray-700 mb-2">Recurso devuelto cuando algo sale mal en una operación.</p>
+            </div>
+        </div>
+
+        <!-- Uso de Paradigmas -->
+        <div class="section-card">
+            <h2 class="section-title flex items-center"><i class="fas fa-balance-scale mr-3 text-blue-600"></i> ¿Cuál Paradigma es el Mejor?</h2>
+            <div class="section-content">
+                <p class="text-md text-gray-700 mb-4">No hay absolutos; es solo orientación influenciada por la preferencia y el caso de uso. No está limitado a un solo paradigma, se pueden mezclar y combinar según el caso de uso y las capacidades del sistema.</p>
+
+                <h3 class="text-lg font-semibold mt-4 mb-2 text-blue-700">Casos de Uso Comunes:</h3>
+                <ul class="text-gray-600">
+                    <li><span class="icon"><i class="fas fa-search"></i></span><strong>Servidor de Terminología Clínica (SNOMED CT):</strong> Posiblemente REST para búsqueda.</li>
+                    <li><span class="icon"><i class="fas fa-folder"></i></span><strong>Repositorio de Documentos Clínicos (sin CDA R2/PDF):</strong> Paradigma de Documentos.</li>
+                    <li><span class="icon"><i class="fas fa-address-book"></i></span><strong>Directorio de Proveedores con Capacidades de Búsqueda:</strong> REST para CRUD y búsqueda.</li>
+                    <li><span class="icon"><i class="fas fa-file-export"></i></span><strong>Acceso a Datos Oncológicos Desidentificados (10M pacientes):</strong> Transferencia Masiva de Datos FHIR.</li>
+                    <li><span class="icon"><i class="fas fa-prescription-bottle-alt"></i></span><strong>Receta Electrónica:</strong> Mensajería o Transacciones.</li>
+                    <li><span class="icon"><i class="fas fa-database"></i></span><strong>Nuevo Repositorio de Datos Clínicos No-SQL:</strong> Almacenamiento FHIR.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Actividad #4: Transacción FHIR -->
+        <div class="section-card">
+            <h2 class="section-title flex items-center"><i class="fas fa-flask mr-3 text-blue-600"></i> Actividad #4: Transacción FHIR</h2>
+            <div class="section-content">
+                <p class="text-md text-gray-700 mb-2"><strong>Objetivo:</strong> Publicar resultados de un dispositivo portátil de medición de glucosa en un servidor EHR usando una transacción FHIR.</p>
+                <ul class="text-gray-600">
+                    <li><span class="icon"><i class="fas fa-eye"></i></span><strong>Guiado:</strong> Se mostrará cómo crear la transacción.</li>
+                    <li><span class="icon"><i class="fas fa-hand-pointer"></i></span><strong>Tu turno:</strong> Se pedirá buscar el propio paquete.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Conclusión -->
+        <div class="section-card">
+            <h2 class="section-title flex items-center"><i class="fas fa-check-double mr-3 text-blue-600"></i> Resumen de la Sesión</h2>
+            <div class="section-content">
+                <p class="text-md text-gray-700 mb-2">Describimos los Paradigmas FHIR y discutimos cómo seleccionarlos para casos de uso específicos:</p>
+                <ul class="text-gray-600">
+                    <li><span class="icon"><i class="fas fa-circle"></i></span>REST</li>
+                    <li><span class="icon"><i class="fas fa-circle"></i></span>REST + Transacciones</li>
+                    <li><span class="icon"><i class="fas fa-circle"></i></span>Mensajería, Documentos</li>
+                    <li><span class="icon"><i class="fas fa-circle"></i></span>Servicios</li>
+                    <li><span class="icon"><i class="fas fa-circle"></i></span>Almacenamiento, Transferencia Masiva</li>
+                </ul>
+                <p class="text-md text-gray-700 mt-2">También se guardó un paquete de recursos en un servidor de prueba.</p>
+            </div>
+        </div>
+
+        <!-- Despedida -->
+        <div class="break-card">
+            <i class="fas fa-handshake text-2xl mr-3"></i> ¡Gracias! ¿Preguntas? <i class="fas fa-question-circle text-2xl ml-3"></i>
+        </div>
+
+        <div class="footer-info">
+            <p>&copy; 2025 HL7 INTERNATIONAL Todos los derechos reservados.</p>
+        </div>
+    </div>
+
+</body>
+</html>

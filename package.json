@@ -1,0 +1,38 @@
+{
+  "name": "fhir-para-arquitectos",
+  "version": "1.0.0",
+  "description": "Curso FHIR para Arquitectos de Software - Materiales y presentaciones",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "dev": "python3 -m http.server 8000",
+    "build": "echo 'No build step required for static HTML'",
+    "test": "echo 'No tests specified'"
+  },
+  "keywords": [
+    "fhir",
+    "healthcare",
+    "interoperability",
+    "hl7",
+    "architecture",
+    "software",
+    "course",
+    "training",
+    "spanish"
+  ],
+  "author": "Diego Kaminker",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tu-usuario/fhir-para-arquitectos.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tu-usuario/fhir-para-arquitectos/issues"
+  },
+  "homepage": "https://tu-usuario.github.io/fhir-para-arquitectos",
+  "devDependencies": {},
+  "dependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  }
+} 

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FHIR para Arquitectos de Software: Infografía del Temario</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .header {
+            background: linear-gradient(to right, #4a90e2, #50b0f7);
+            color: white;
+            padding: 2rem;
+            border-radius: 0.75rem 0.75rem 0 0;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .module-card {
+            background-color: #f7f9fc;
+            border-left: 6px solid #4a90e2;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        .break-card {
+            background-color: #ffedd5;
+            border-left: 6px solid #f97316;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #f97316;
+            font-weight: 600;
+        }
+        .module-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 0.75rem;
+        }
+        .module-time {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 1rem;
+        }
+        .module-topics ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .module-topics li {
+            background-color: #e3f2fd;
+            padding: 0.6rem 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            color: #1e88e5;
+            display: flex;
+            align-items: flex-start;
+        }
+        .module-topics li:last-child {
+            margin-bottom: 0;
+        }
+        .module-topics li .icon {
+            margin-right: 0.75rem;
+            color: #4a90e2;
+            font-size: 1.1rem;
+            line-height: 1.4; /* Adjust line-height for better alignment */
+        }
+        .footer-info {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px dashed #ddd;
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header rounded-xl">
+            <h1 class="text-4xl font-extrabold mb-2">FHIR para Arquitectos de Software</h1>
+            <p class="text-xl">Resumen del Temario</p>
+        </div>
+
+        <div class="bg-blue-50 p-6 rounded-xl shadow-md mb-6 text-center">
+            <p class="text-lg font-semibold text-blue-800 mb-2">Objetivo General:</p>
+            <p class="text-md text-blue-700">Capacitar a los participantes en los principios y metodologías avanzadas para la implementación de soluciones basadas en el estándar FHIR, incluyendo estrategias de intercambio de información, coexistencia con estándares heredados, diseño de arquitectura de sistemas, implementación de seguridad y despliegue en entornos de nube.</p>
+            <div class="mt-4 flex flex-wrap justify-center gap-4 text-blue-900">
+                <p class="flex items-center"><i class="fas fa-clock mr-2"></i> Tiempo Total: 4 horas</p>
+                <p class="flex items-center"><i class="fas fa-calendar-alt mr-2"></i> Fecha: 19 de junio de 2025, 14:00 a 18:00 hs</p>
+                <p class="flex items-center"><i class="fas fa-chalkboard-teacher mr-2"></i> Impartido por: Diego Kaminker</p>
+            </div>
+        </div>
+
+        <!-- Module 1 -->
+        <div class="module-card">
+            <h2 class="module-title flex items-center"><i class="fas fa-exchange-alt mr-3 text-blue-600"></i> Módulo 1: Paradigmas de Intercambio con FHIR</h2>
+            <p class="module-time">(40 min + 5 P&R)</p>
+            <div class="module-topics">
+                <ul>
+                    <li><span class="icon"><i class="fas fa-check-circle"></i></span>Criterios de decisión para seleccionar estrategias de intercambio de información según el escenario/caso de uso.</li>
+                    <li><span class="icon"><i class="fas fa-check-circle"></i></span>Análisis de transacciones, lotes, mensajería, suscripciones y transferencias masivas.</li>
+                    <li><span class="icon"><i class="fas fa-check-circle"></i></span>Estrategias de "pull" y "push" en el intercambio de datos.</li>
+                    <li class="bg-transparent text-gray-700 shadow-none"><span class="icon"><i class="fas fa-file-pdf"></i></span><a href="session_1.html" class="hover:underline">SESSION_1_FHIR_EXCHANGE_MECHANISMS.pptx (1).pdf</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Module 2 -->
+        <div class="module-card">
+            <h2 class="module-title flex items-center"><i class="fas fa-cogs mr-3 text-blue-600"></i> Módulo 2: FHIR y Otros Estándares</h2>
+            <p class="module-time">(40 min + 5 P&R)</p>
+            <div class="module-topics">
+                <ul>
+                    <li><span class="icon"><i class="fas fa-check-circle"></i></span>Técnicas para transformar información de artefactos de estándares heredados.</li>
+                    <li><span class="icon"><i class="fas fa-check-circle"></i></span>Documentos: Enfoque específico en CDA R2 / CCDA.</li>
+                    <li><span class="icon"><i class="fas fa-check-circle"></i></span>Mensajes: Enfoque en mensajes HL7 V2 ADT y ORU.</li>
+                    <li class="bg-transparent text-gray-700 shadow-none"><span class="icon"><i class="fas fa-file-pdf"></i></span><a href="session_2.html" class="hover:underline">SESSION_2_FHIR_OTHER_STANDARDS.pdf</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Break -->
+        <div class="break-card">
+            <i class="fas fa-mug-hot text-2xl mr-3"></i> DESCANSO 15 minutos <i class="fas fa-mug-hot text-2xl ml-3"></i>
+        </div>
+
+        <!-- Module 3 -->
+        <div class="module-card">
+            <h2 class="module-title flex items-center"><i class="fas fa-sitemap mr-3 text-blue-600"></i> Módulo 3: Arquitectura de Sistemas</h2>
+            <p class="module-time">(40 min + 5 P&R)</p>
+            <div class="module-topics">
+                <ul>
+                    <li><span class="icon"><i class="fas fa-check-circle"></i></span>Componentes esenciales para cualquier proyecto de implementación FHIR: autenticación, autorización, registros de pacientes/proveedores, servicios de terminología, gestión de consentimientos, etc.</li>
+                    <li><span class="icon"><i class="fas fa-check-circle"></i></span>Modelos de interacción y cómo los componentes del sistema trabajan juntos.</li>
+                    <li class="bg-transparent text-gray-700 shadow-none"><span class="icon"><i class="fas fa-file-pdf"></i></span><a href="session_3.html" class="hover:underline">SESSION_3_FHIR_COMPONENTS.pptx.pdf</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Module 4 -->
+        <div class="module-card">
+            <h2 class="module-title flex items-center"><i class="fas fa-shield-alt mr-3 text-blue-600"></i> Módulo 4: Implementación de Seguridad</h2>
+            <p class="module-time">(40 min + 5 P&R)</p>
+            <div class="module-topics">
+                <ul>
+                    <li><span class="icon"><i class="fas fa-check-circle"></i></span>Modelos de seguridad: oAuth, oAuth2, Smart-on-FHIR, Smart Credentials, X-Road.</li>
+                    <li><span class="icon"><i class="fas fa-check-circle"></i></span>Recursos FHIR relacionados con la seguridad: AuditEvent, Provenance, Consent.</li>
+                    <li><span class="icon"><i class="fas fa-check-circle"></i></span>Estrategias para asegurar y probar eficazmente aplicaciones del lado del servidor o del cliente.</li>
+                    <li class="bg-transparent text-gray-700 shadow-none"><span class="icon"><i class="fas fa-file-pdf"></i></span><a href="session_4.html" class="hover:underline">SESSION_4_SECURITY_CONSIDERATIONS.pdf</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Module 5 -->
+        <div class="module-card">
+            <h2 class="module-title flex items-center"><i class="fas fa-cloud mr-3 text-blue-600"></i> Módulo 5: FHIR en la Nube</h2>
+            <p class="module-time">(40 min + 5 P&R)</p>
+            <div class="module-topics">
+                <ul>
+                    <li><span class="icon"><i class="fas fa-check-circle"></i></span>Uso de ofertas de servidores FHIR "nativos" basados en la nube existentes como parte de proyectos de implementación.</li>
+                    <li><span class="icon"><i class="fas fa-check-circle"></i></span>Consideraciones de escalabilidad y flexibilidad.</li>
+                    <li><span class="icon"><i class="fas fa-check-circle"></i></span>Características comunes y específicas de las soluciones FHIR basadas en la nube.</li>
+                    <li class="bg-transparent text-gray-700 shadow-none"><span class="icon"><i class="fas fa-file-pdf"></i></span><a href="session_5.html" class="hover:underline">SESSION_5_FHIR_IN_THE_CLOUDS.pptx.pdf</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-info">
+            <p>&copy; 2025 HL7 INTERNATIONAL Todos los derechos reservados.</p>
+        </div>
+    </div>
+
+</body>
+</html>

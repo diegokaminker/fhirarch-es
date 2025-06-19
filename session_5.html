@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FHIR en la Nube para Arquitectos: Sesión 5</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .header {
+            background: linear-gradient(to right, #4a90e2, #50b0f7);
+            color: white;
+            padding: 2rem;
+            border-radius: 0.75rem 0.75rem 0 0;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .section-card {
+            background-color: #f7f9fc;
+            border-left: 6px solid #4a90e2;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        .content-item {
+            background-color: #e3f2fd;
+            padding: 0.8rem 1.2rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            color: #1e88e5;
+            line-height: 1.5;
+        }
+        .content-item strong {
+            color: #2a6db8;
+        }
+        .content-item ul {
+            list-style: disc;
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+            color: #333;
+            font-size: 0.9rem;
+        }
+        .content-item ul li {
+            background-color: transparent;
+            padding: 0.2rem 0;
+            margin-bottom: 0;
+        }
+        .footer-info {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px dashed #ddd;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .break-card {
+            background-color: #ffedd5;
+            border-left: 6px solid #f97316;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #f97316;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header rounded-xl">
+            <h1 class="text-4xl font-extrabold mb-2">FHIR para Arquitectos</h1>
+            <p class="text-xl">Sesión 5: FHIR en la Nube</p>
+        </div>
+
+        <div class="bg-blue-50 p-6 rounded-xl shadow-md mb-6 text-center">
+            <p class="text-lg font-semibold text-blue-800 mb-2">Presentado por: Diego Kaminker</p>
+            <p class="text-md text-blue-700">Esta sesión explora las capacidades básicas de las ofertas de FHIR como servicio, cómo configurar un servicio FHIR básico en la nube, y cómo compartir y transferir información clínica a proveedores de "big data".</p>
+            <p class="text-sm text-blue-600 mt-2"><strong>Descargo de responsabilidad:</strong> Esta sesión menciona productos y servicios de proveedores de la nube como reconocimiento de tendencias de la industria, NO como respaldo.</p>
+        </div>
+
+        <!-- Objetivos de Aprendizaje -->
+        <div class="section-card">
+            <h2 class="section-title flex items-center"><i class="fas fa-bullseye mr-3 text-blue-600"></i> Objetivos de Aprendizaje</h2>
+            <div class="content-item">
+                Los participantes comprenderán:
+                <ul>
+                    <li><span class="icon"><i class="fas fa-cloud"></i></span>Capacidades básicas de las ofertas de FHIR-as-a-service.</li>
+                    <li><span class="icon"><i class="fas fa-cogs"></i></span>Cómo configurar un servicio FHIR básico usando diferentes enfoques de proveedores de la nube.</li>
+                    <li><span class="icon"><i class="fas fa-share-alt"></i></span>Cómo compartir información para clientes clínicos.</li>
+                    <li><span class="icon"><i class="fas fa-database"></i></span>Cómo transferir información a proveedores de "big data".</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Lo que NO haremos -->
+        <div class="section-card">
+            <h2 class="section-title flex items-center"><i class="fas fa-ban mr-3 text-red-600"></i> Lo que NO haremos en esta sesión</h2>
+            <div class="content-item bg-red-50 text-red-800 border-red-400 border-l-4">
+                <ul>
+                    <li><span class="icon"><i class="fas fa-times-circle"></i></span>Discutir el rendimiento o la escalabilidad en profundidad.</li>
+                    <li><span class="icon"><i class="fas fa-times-circle"></i></span>Discutir la seguridad (cifrado, autorización, autenticación) en profundidad.</li>
+                    <li><span class="icon"><i class="fas fa-times-circle"></i></span>Proporcionar créditos para probar los enfoques (la mayoría de los servicios en la nube ofrecen créditos o meses gratis).</li>
+                    <li><span class="icon"><i class="fas fa-times-circle"></i></span>Discutir los costos (varían según el país, región y contrato).</li>
+                    <li><span class="icon"><i class="fas fa-times-circle"></i></span>Avalar a ningún proveedor o enfoque específico.</li>
+                    <li><span class="icon"><i class="fas fa-times-circle"></i></span>Usar "salsas secretas" o "ajustes especiales" (basado en documentación pública).</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ¿Por qué FHIR en la Nube? -->
+        <div class="section-card">
+            <h2 class="section-title flex items-center"><i class="fas fa-question-circle mr-3 text-blue-600"></i> ¿Por qué FHIR en la Nube?</h2>
+            <div class="content-item">
+                <strong>Fachada FHIR (FHIR Facade):</strong> Un cliente FHIR se conecta a una API FHIR Facade que mapea y transforma datos a/desde FHIR desde una base de datos propietaria.
+            </div>
+            <div class="content-item">
+                <strong>Fachada Inversa FHIR (FHIR Reverse Facade):</strong> Un servidor FHIR "nativo" (almacenamiento de recursos) se conecta a datos originales (DB o API) a través de un servicio de transformación FHIR, permitiendo la lectura/escritura y exportación.
+            </div>
+            <div class="content-item">
+                <strong>Modelos de Servicios en la Nube:</strong>
+                <ul>
+                    <li><span class="icon"><i class="fas fa-cloud"></i></span><strong>SaaS (Software as a Service):</strong> Centrado en el usuario final (ej. Gmail).</li>
+                    <li><span class="icon"><i class="fas fa-cloud"></i></span><strong>IaaS (Infrastructure as a Service):</strong> Infraestructura como servicio (ej. Instancias de servidor, almacenamiento, DB). Se gestiona la actualización, parches, seguridad, pero no el hardware.</li>
+                    <li><span class="icon"><i class="fas fa-cloud"></i></span><strong>PaaS (Platform as a Service):</strong> Plataforma como servicio (ej. Se enfoca en desarrollar la aplicación, el resto es gestionado por terceros). Permite escalabilidad automática.</li>
+                </ul>
+            </div>
+            <div class="content-item">
+                <strong>FHIR como Servicio (FaaS):</strong> Una estrategia integral que va más allá del simple almacenamiento, ofreciendo un "Repositorio de Salud" completo que puede incluir almacenamiento DICOM, mensajes V2, procesamiento NLP, etc.
+            </div>
+        </div>
+
+        <!-- Características Comunes -->
+        <div class="section-card">
+            <h2 class="section-title flex items-center"><i class="fas fa-check-double mr-3 text-blue-600"></i> Características Comunes de FHIR-as-a-Service</h2>
+            <div class="content-item">
+                <strong>Almacenamiento compatible con FHIR:</strong> Almacenamiento "nativo" de FHIR, donde la información se guarda como recursos FHIR, creando un Repositorio de Datos Clínicos que permite el intercambio con clientes REST / Bulk FHIR.
+            </div>
+            <div class="content-item">
+                <strong>Autorización/Autenticación (incluyendo Smart-on-FHIR):</strong> Variantes de OAuth2 y Smart-on-FHIR para autenticación y autorización basada en roles, con soporte para consentimiento.
+            </div>
+            <div class="content-item">
+                <strong>Importación Masiva:</strong> Proceso para inicializar el almacén FHIR con miles de registros de pacientes, proveedores, organizaciones, etc.
+            </div>
+            <div class="content-item">
+                <strong>Soporte para Intercambio de Datos FHIR:</strong>
+                <ul>
+                    <li>API RESTful regular.</li>
+                    <li>Otros métodos de intercambio (documentos, mensajes).</li>
+                    <li>Parámetros de búsqueda personalizados.</li>
+                    <li>Operaciones estándar (ejemplo: <code>$everything</code>).</li>
+                    <li>Operaciones de servicio de terminología (ejemplo: <code>$expand</code>, <code>$lookup</code>).</li>
+                    <li>Definición de operaciones personalizadas.</li>
+                    <li>Perfiles y validación (ejemplo: <code>$validate</code>).</li>
+                </ul>
+            </div>
+            <div class="content-item">
+                <strong>Conversión de Datos:</strong> Parte del proceso de ingesta, transforma automáticamente datos de HL7 v2.x, C-CDA o formatos personalizados a FHIR (ej. mediante el endpoint <code>$convert-data</code>).
+            </div>
+            <div class="content-item">
+                <strong>Exportación Masiva:</strong> Permite obtener información clínica para análisis de salud poblacional, reclamaciones de pagadores o transferencias entre almacenes, manejando miles de registros.
+            </div>
+            <div class="content-item">
+                <strong>Sincronización:</strong> Permite que los datos "en bruto" o los datos FHIR se reflejen automáticamente en un "almacén de big data" cada vez que se añade/modifica un recurso.
+            </div>
+            <div class="content-item">
+                <strong>Desidentificación:</strong> Obligatorio por regulaciones, elimina o enmascara datos demográficos relevantes del paciente para asegurar la confidencialidad.
+            </div>
+            <div class="content-item">
+                <strong>Registro de Auditoría:</strong> Registro completo de auditoría, utilizando la estrategia de registro de cada plataforma y cumpliendo con normativas como HIPAA.
+            </div>
+            <div class="content-item">
+                <strong>Suscripciones:</strong> Permite recibir notificaciones cuando se crea/actualiza/elimina un recurso FHIR de una clase específica, con filtros definidos.
+            </div>
+        </div>
+
+        <!-- Referencias y Otros -->
+        <div class="section-card">
+            <h2 class="section-title flex items-center"><i class="fas fa-book-open mr-3 text-blue-600"></i> Referencias y Otras Ofertas</h2>
+            <div class="content-item">
+                <strong>Proveedores de la Nube:</strong> Google Cloud (Healthcare API), AWS (HealthLake), Microsoft Azure (Health Data Services).
+            </div>
+            <div class="content-item">
+                <strong>Otras Ofertas (no cubiertas en esta sesión):</strong>
+                <ul>
+                    <li><span class="icon"><i class="fas fa-code-branch"></i></span>LinuxForHealth/FHIR (GitHub).</li>
+                    <li><span class="icon"><i class="fas fa-database"></i></span>Oracle Cloud Infrastructure.</li>
+                    <li><span class="icon"><i class="fas fa-building"></i></span>Proveedores no "Big-5": AidBox, Firely, Smile Digital Health (ofrecen la mayoría de estos servicios).</li>
+                    <li><span class="icon"><i class="fas fa-users-cog"></i></span>Alternativas de código abierto: Para la mayoría de los servicios, permitiendo despliegues locales o contratación de IAAS.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-info">
+            <p>&copy; 2025 FHIR en la Nube para Arquitectos. Todos los derechos reservados.</p>
+            <p>¿Preguntas?</p>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografía: FHIR y el Ecosistema de Estándares HL7</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- 
+    Palette Name: Brilliant Blues
+    Analysis & Plan Summary:
+    Narrative Plan: The infographic explains the FHIR ecosystem beyond the core spec. It starts by introducing the foundational 'General Purpose Servers' which provide a ready-to-use FHIR backbone. It then transitions to the challenge of integrating with legacy systems, first by explaining the official 'HL7 V2 to FHIR Mapping Guide' as a conceptual bridge. Finally, it presents concrete 'Transformation & Mapping Tools' that implement these conversions, completing the interoperability picture. The narrative flows from foundational infrastructure to practical integration solutions.
+    Visualization Choices:
+    1. Data Point: Relative popularity and primary language of General Purpose FHIR servers. Goal: Compare. Chosen Visualization: Horizontal Bar Chart. Justification: Ideal for comparing distinct categories (the servers) along a single metric (popularity). The language is shown with text. Library/Method: Chart.js (Canvas). NO SVG.
+    2. Data Point: The conceptual process of converting an HL7 V2 message to a FHIR resource. Goal: Organize. Chosen Visualization: HTML/CSS Flow Diagram. Justification: Clearly illustrates a multi-step process using basic web elements, adhering to the NO SVG/NO MERMAID JS constraint. Library/Method: Tailwind CSS. NO SVG, NO MERMAID JS.
+    3. Data Point: Multi-faceted comparison of Transformation & Mapping (T&M) tools across features like flexibility, supported formats, and open-source status. Goal: Compare. Chosen Visualization: Radar Chart. Justification: Perfect for comparing multiple items (tools) across multiple, distinct axes (features), providing a quick visual summary of their strengths. Library/Method: Chart.js (Canvas). NO SVG.
+    Confirmation: NEITHER Mermaid JS NOR SVG were used anywhere in this output.
+    -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #EFF6FF;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-blue-900 mb-2">FHIR y el Ecosistema de Estándares HL7</h1>
+            <p class="text-lg text-blue-700">Herramientas y Puentes para la Interoperabilidad Total</p>
+        </header>
+
+        <main class="space-y-16">
+
+            <section id="servers">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-blue-900">1. Servidores FHIR de Propósito General</h2>
+                    <p class="mt-2 max-w-3xl mx-auto text-blue-800">Son la base para construir soluciones FHIR. Ofrecen una implementación lista para usar de la especificación, cubriendo la mayoría de los recursos y operaciones estándar, permitiendo un desarrollo y despliegue rápidos.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="bg-white p-6 rounded-lg shadow-lg border border-blue-100">
+                        <h3 class="text-xl font-bold text-blue-900 mb-4">Comparativa de Adopción y Tecnología</h3>
+                        <p class="text-sm text-gray-600 mb-4">Esta gráfica representa la popularidad relativa y el lenguaje de programación principal de los servidores FHIR más comunes. HAPI FHIR, basado en Java, muestra una alta adopción en el ecosistema empresarial, mientras que Spark (C#) es una fuerte alternativa en el mundo .NET. FHIR Candle sirve a un nicho crucial para pruebas rápidas.</p>
+                        <div class="chart-container">
+                            <canvas id="serverChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-white p-6 rounded-lg shadow-md border border-blue-100 transition-transform transform hover:scale-105">
+                            <h4 class="font-bold text-lg text-blue-800">HAPI FHIR (Java)</h4>
+                            <p class="text-sm text-gray-700 mt-1">La implementación de referencia en Java. Muy completa y robusta, es la opción preferida para entornos de producción a gran escala.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md border border-blue-100 transition-transform transform hover:scale-105">
+                            <h4 class="font-bold text-lg text-blue-800">Spark (C#)</h4>
+                            <p class="text-sm text-gray-700 mt-1">El principal servidor FHIR de código abierto en el ecosistema .NET, desarrollado inicialmente por Firely. Una opción sólida y probada.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md border border-blue-100 transition-transform transform hover:scale-105">
+                            <h4 class="font-bold text-lg text-blue-800">FHIR Candle (En memoria)</h4>
+                            <p class="text-sm text-gray-700 mt-1">Un servidor ultraligero para pruebas y desarrollo. Arranca al instante y no requiere base de datos, ideal para validación rápida de IGs.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="mapping">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-blue-900">2. El Puente Hacia Estándares Previos</h2>
+                    <p class="mt-2 max-w-3xl mx-auto text-blue-800">La interoperabilidad real requiere conectar FHIR con sistemas legados. El mapeo conceptual desde estándares como HL7v2 es el primer paso fundamental en este proceso de modernización.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-lg shadow-lg border border-blue-100">
+                    <h3 class="text-xl font-bold text-blue-900 mb-2 text-center">Proceso de Mapeo: De HL7v2 a FHIR</h3>
+                    <p class="text-sm text-gray-600 mb-8 text-center max-w-2xl mx-auto">Este diagrama ilustra el flujo conceptual de transformación. Un mensaje HL7v2 es procesado por un motor de mapeo, que utiliza guías de implementación (como la oficial de `v2-to-fhir`) para convertir los datos a recursos FHIR estructurados. Este es un proceso guiado por reglas, no una conversión automática.</p>
+                    
+                    <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
+                        <div class="flex items-center flex-col text-center">
+                            <div class="bg-blue-100 text-blue-800 p-4 rounded-lg shadow">
+                                <span class="text-3xl">📄</span>
+                                <p class="font-semibold mt-2">Mensaje HL7v2</p>
+                            </div>
+                        </div>
+                        
+                        <div class="text-5xl text-blue-400 font-light transform md:rotate-0 rotate-90">&rarr;</div>
+
+                        <div class="flex items-center flex-col text-center">
+                             <div class="bg-blue-200 text-blue-900 p-4 rounded-lg shadow">
+                                <span class="text-3xl">⚙️</span>
+                                <p class="font-semibold mt-2">Motor de Mapeo</p>
+                                <p class="text-xs">(Usa Guía IG)</p>
+                            </div>
+                        </div>
+
+                        <div class="text-5xl text-blue-400 font-light transform md:rotate-0 rotate-90">&rarr;</div>
+
+                        <div class="flex items-center flex-col text-center">
+                            <div class="bg-blue-300 text-blue-900 p-4 rounded-lg shadow">
+                                <span class="text-3xl">🔥</span>
+                                <p class="font-semibold mt-2">Recurso FHIR</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tools">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-blue-900">3. Herramientas de Transformación y Mapeo (T&M)</h2>
+                    <p class="mt-2 max-w-3xl mx-auto text-blue-800">Estas herramientas especializadas implementan la lógica de conversión, permitiendo a las organizaciones transformar datos entre formatos legados y FHIR de manera eficiente y escalable.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                     <div class="space-y-4">
+                        <div class="bg-white p-6 rounded-lg shadow-md border border-blue-100 transition-transform transform hover:scale-105">
+                            <h4 class="font-bold text-lg text-blue-800">FUME by Outburn</h4>
+                            <p class="text-sm text-gray-700 mt-1">Un motor de conversión con una sintaxis propia y expresiva, diseñado para analistas de datos. Ofrece una API para transformaciones en tiempo real.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md border border-blue-100 transition-transform transform hover:scale-105">
+                            <h4 class="font-bold text-lg text-blue-800">Microsoft FHIR Converter</h4>
+                            <p class="text-sm text-gray-700 mt-1">Proyecto open-source que usa plantillas Liquid para conversiones flexibles. Soporta HL7v2, C-CDA y más. Integrado en el ecosistema Azure.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md border border-blue-100 transition-transform transform hover:scale-105">
+                            <h4 class="font-bold text-lg text-blue-800">Mirth Connect</h4>
+                            <p class="text-sm text-gray-700 mt-1">Un motor de integración clásico que actúa como un "traductor universal", capaz de filtrar, transformar y enrutar mensajes entre múltiples estándares.</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg border border-blue-100">
+                         <h3 class="text-xl font-bold text-blue-900 mb-4">Radar de Capacidades de Herramientas T&M</h3>
+                        <p class="text-sm text-gray-600 mb-4">Este gráfico compara las herramientas de transformación en ejes clave. Microsoft FHIR Converter destaca por su flexibilidad y estatus de código abierto, FUME por su sintaxis especializada, y Mirth por su madurez y capacidades de enrutamiento complejas.</p>
+                        <div class="chart-container">
+                            <canvas id="toolRadarChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="text-center mt-16 pt-8 border-t border-blue-200">
+            <p class="text-blue-800">&copy; 2025 Infografía de Ecosistema FHIR. La interoperabilidad se logra con una base sólida y los puentes correctos.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        const wrapLabel = (label, maxWidth) => {
+            if (label.length <= maxWidth) {
+                return label;
+            }
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            words.forEach(word => {
+                if ((currentLine + ' ' + word).trim().length > maxWidth && currentLine.length > 0) {
+                    lines.push(currentLine);
+                    currentLine = word;
+                } else {
+                    currentLine = (currentLine + ' ' + word).trim();
+                }
+            });
+            if (currentLine.length > 0) {
+                lines.push(currentLine);
+            }
+            return lines;
+        };
+
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+              return label.join(' ');
+            }
+            return label;
+        };
+        
+        const chartTooltipOptions = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: tooltipTitleCallback
+                    }
+                }
+            }
+        };
+
+        const serverCtx = document.getElementById('serverChart').getContext('2d');
+        new Chart(serverCtx, {
+            type: 'bar',
+            data: {
+                labels: ['HAPI FHIR', 'Spark', 'FHIR Candle'],
+                datasets: [{
+                    label: 'Adopción Relativa',
+                    data: [90, 70, 45],
+                    backgroundColor: ['#3B82F6', '#60A5FA', '#93C5FD'],
+                    borderColor: '#1E3A8A',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                ...chartTooltipOptions,
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    ...chartTooltipOptions.plugins,
+                    legend: {
+                        display: false
+                    },
+                    annotation: {
+                        annotations: {
+                            label1: {
+                                type: 'label',
+                                yValue: 'HAPI FHIR',
+                                xValue: 92,
+                                content: 'Java',
+                                font: { size: 12 },
+                                color: '#1E3A8A',
+                                xAdjust: -25,
+                            },
+                             label2: {
+                                type: 'label',
+                                yValue: 'Spark',
+                                xValue: 72,
+                                content: 'C#',
+                                font: { size: 12 },
+                                color: '#1E3A8A',
+                                xAdjust: -20,
+                            },
+                             label3: {
+                                type: 'label',
+                                yValue: 'FHIR Candle',
+                                xValue: 47,
+                                content: 'Test',
+                                font: { size: 12 },
+                                color: '#1E3A8A',
+                                xAdjust: -25,
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        grid: {
+                            color: '#DBEAFE'
+                        },
+                        ticks: {
+                           color: '#1E3A8A'
+                        }
+                    },
+                    y: {
+                         grid: {
+                            display: false
+                        },
+                        ticks: {
+                           color: '#1E3A8A'
+                        }
+                    }
+                }
+            }
+        });
+
+        const toolRadarCtx = document.getElementById('toolRadarChart').getContext('2d');
+        new Chart(toolRadarCtx, {
+            type: 'radar',
+            data: {
+                labels: [
+                    'Formatos Soportados',
+                    'Flexibilidad', 
+                    'Comunidad / Open Source', 
+                    'Curva de Aprendizaje', 
+                    'Capacidad de Enrutamiento'
+                ].map(l => wrapLabel(l, 16)),
+                datasets: [{
+                    label: 'MS FHIR Converter',
+                    data: [8, 9, 9, 6, 4],
+                    fill: true,
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                    borderColor: 'rgb(59, 130, 246)',
+                    pointBackgroundColor: 'rgb(59, 130, 246)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(59, 130, 246)'
+                }, {
+                    label: 'FUME',
+                    data: [7, 7, 5, 8, 5],
+                    fill: true,
+                    backgroundColor: 'rgba(30, 58, 138, 0.2)',
+                    borderColor: 'rgb(30, 58, 138)',
+                    pointBackgroundColor: 'rgb(30, 58, 138)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(30, 58, 138)'
+                }, {
+                    label: 'Mirth Connect',
+                    data: [9, 6, 6, 5, 9],
+                    fill: true,
+                    backgroundColor: 'rgba(147, 197, 253, 0.2)',
+                    borderColor: 'rgb(147, 197, 253)',
+                    pointBackgroundColor: 'rgb(147, 197, 253)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(147, 197, 253)'
+                }]
+            },
+            options: {
+                ...chartTooltipOptions,
+                responsive: true,
+                maintainAspectRatio: false,
+                elements: {
+                    line: {
+                        borderWidth: 2
+                    }
+                },
+                scales: {
+                    r: {
+                        angleLines: { color: '#BFDBFE' },
+                        grid: { color: '#BFDBFE' },
+                        pointLabels: { color: '#1E3A8A', font: {size: 11} },
+                        ticks: {
+                          display: false,
+                          beginAtZero: true,
+                          max: 10,
+                          stepSize: 2
+                        }
+                    }
+                },
+                plugins: {
+                    ...chartTooltipOptions.plugins,
+                    legend: {
+                       position: 'top',
+                       labels: {
+                           color: '#1E3A8A'
+                       }
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
