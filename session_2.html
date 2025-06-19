@@ -294,10 +294,25 @@
             </div>
         </div>
 
+        <!-- Quiz Section -->
+        <div class="category-card">
+            <h2 class="category-title"><i class="fas fa-question-circle mr-3 text-blue-600"></i> Evaluación del Módulo</h2>
+            <div class="section-content">
+                <p class="text-md text-gray-700 mb-4">Pon a prueba tus conocimientos sobre FHIR y otros estándares con estas 10 preguntas de opción múltiple.</p>
+                <button onclick="startQuiz('session2')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                    <i class="fas fa-play mr-2"></i>Comenzar Evaluación
+                </button>
+            </div>
+            <div id="quiz-container" class="mt-6"></div>
+        </div>
+
         <div class="footer-info">
             <p>&copy; 2025 HL7 INTERNATIONAL Todos los derechos reservados.</p>
         </div>
     </div>
+
+    <!-- Quiz JavaScript -->
+    <script src="quiz.js"></script>
 
 </body>
 </html>

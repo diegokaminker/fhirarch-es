@@ -274,12 +274,27 @@
             </div>
         </div>
 
+        <!-- Quiz Section -->
+        <div class="section-card">
+            <h2 class="section-title flex items-center"><i class="fas fa-question-circle mr-3 text-blue-600"></i> Evaluación del Módulo</h2>
+            <div class="section-content">
+                <p class="text-md text-gray-700 mb-4">Pon a prueba tus conocimientos sobre implementación de seguridad en FHIR con estas 10 preguntas de opción múltiple.</p>
+                <button onclick="startQuiz('session4')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                    <i class="fas fa-play mr-2"></i>Comenzar Evaluación
+                </button>
+            </div>
+            <div id="quiz-container" class="mt-6"></div>
+        </div>
+
         <div class="footer-info">
             <p>&copy; 2025 John Moehrke. Todos los derechos reservados.</p>
             <p>Preguntas o discusión continua: <a href="https://chat.fhir.org">chat.fhir.org</a> (Security & Privacy Stream), Grupo de Trabajo de Seguridad de HL7, Llamada de Seguridad de FHIR (lunes 12 p.m. este).</p>
             <p>Contacto: John Moehrke (JohnMoehrke@gmail.com)</p>
         </div>
     </div>
+
+    <!-- Quiz JavaScript -->
+    <script src="quiz.js"></script>
 
 </body>
 </html>
